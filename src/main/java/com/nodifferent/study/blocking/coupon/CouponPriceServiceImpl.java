@@ -1,10 +1,12 @@
 package com.nodifferent.study.blocking.coupon;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.concurrent.Future;
+import java.util.concurrent.CompletableFuture;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CouponPriceServiceImpl implements CouponPriceService {
@@ -17,7 +19,16 @@ public class CouponPriceServiceImpl implements CouponPriceService {
     }
 
     @Override
-    public Future<Long> getPriceAsync(String name) {
-        return null;
+    public CompletableFuture<Long> getPriceAsync(String name) {
+
+        CompletableFuture<Long> future = new CompletableFuture<>();
+
+        new Thread(() -> {
+            log.info("신규 Thread Start!");
+            long priceByName = couponRepository.getPriceByName(name);
+            future.complete(priceByName);
+        }).start();
+
+        return future;
     }
 }

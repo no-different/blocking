@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.concurrent.CompletableFuture;
+
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -45,6 +47,18 @@ class CouponRepositoryTest {
     void parameterizedSync(String couponName) throws Exception {
         long priceSync = couponPriceService.getPriceSync(couponName);
         Assertions.assertTrue(priceSync > 0);
+    }
+
+    @Test
+    void asyncTest() throws Exception {
+
+        CompletableFuture<Long> future = couponPriceService.getPriceAsync("mix");
+        System.out.println("결과 받기 전에 다른 작업이 실행");
+
+        Long join = future.join();
+
+        Assertions.assertEquals(join, 1000L);
+
     }
 
 }
