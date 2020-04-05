@@ -2,11 +2,10 @@ package com.nodifferent.study.blocking.coupon;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 @Slf4j
 @Service
@@ -14,8 +13,7 @@ import java.util.concurrent.Executors;
 public class CouponPriceServiceImpl implements CouponPriceService {
 
     private final CouponRepository couponRepository;
-
-    Executor executor = Executors.newFixedThreadPool(10);
+    private final ThreadPoolTaskExecutor taskExecutor;
 
     @Override
     public long getPriceSync(String name) {
@@ -30,7 +28,7 @@ public class CouponPriceServiceImpl implements CouponPriceService {
                     log.info("supplyAsync!");
                     return couponRepository.getPriceByName(name);
                 },
-                executor
+                taskExecutor
         );
     }
 

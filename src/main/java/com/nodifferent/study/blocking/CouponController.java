@@ -1,6 +1,7 @@
 package com.nodifferent.study.blocking;
 
 import com.nodifferent.study.blocking.coupon.CouponPriceService;
+import com.nodifferent.study.blocking.coupon.CouponRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class CouponController {
 
     private final CouponPriceService couponPriceService;
+    private final CouponRepository couponRepository;
 
     @GetMapping("/callback")
     public void asyncCallback() {
