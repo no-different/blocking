@@ -23,6 +23,7 @@ public class CouponRepository {
     public long getPriceByName(String name) {
 
         try {
+            log.info("getPriceByName name={}", name);
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();

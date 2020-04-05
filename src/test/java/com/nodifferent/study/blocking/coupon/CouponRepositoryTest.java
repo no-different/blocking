@@ -12,8 +12,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.concurrent.CompletableFuture;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ContextConfiguration(classes = {
         CouponPriceServiceImpl.class,
@@ -59,6 +58,41 @@ class CouponRepositoryTest {
 
         Assertions.assertEquals(join, 1000L);
 
+    }
+
+    @Test
+    @DisplayName("가격 조회 비동기 호출, 콜백없이 테스트")
+    void asyncTestNoCallBack() throws Exception {
+
+        CompletableFuture<Void> future = couponPriceService.getPriceAsync("mix")
+                .thenAccept(price -> {
+                    System.out.println("가격을 받아오자! price=" + price);
+                    assertEquals(price, 1000L);
+                });
+
+        System.out.println("가격을 받아오라고 하고, 다른 일을 열심히하자!");
+
+        assertNull(future.join());
+    }
+
+    @Test
+    @DisplayName("가격 조회 비동기 호출, 콜백 테스트")
+    void asyncTestCallBack() throws Exception {
+
+        //1.Given
+        CompletableFuture<Void> future = couponPriceService.getPriceAsync("mix")
+                .thenApply(price -> {
+                    System.out.println("thenApply price = " + price);
+                    return price + 100;
+                })
+                .thenAccept(price -> {
+                    System.out.println("thenAccept price = " + price);
+                    assertEquals(1100L, price);
+                });
+
+        System.out.println("mix = " + future);
+
+        assertNull(future.join());
     }
 
 }

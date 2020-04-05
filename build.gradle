@@ -23,15 +23,23 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+	compile('org.springframework.boot:spring-boot-starter-data-jpa')
+	compile("org.projectlombok:lombok:${lombokVersion}")
+
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-web-services'
-	compileOnly 'org.projectlombok:lombok'
+
+
+
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
+
+	testCompile("org.junit.jupiter:junit-jupiter-api")
+	testCompile("org.junit.jupiter:junit-jupiter-params")
 }
 
 test {
