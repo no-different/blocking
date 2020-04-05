@@ -14,27 +14,28 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ContextConfiguration(classes = {
+        CouponPriceServiceImpl.class,
         CouponRepository.class
 })
 @ExtendWith(SpringExtension.class)
 class CouponRepositoryTest {
 
     @Autowired
-    CouponRepository couponRepository;
+    CouponPriceService couponPriceService;
 
     @Test
     @DisplayName("금액비교 single -> 성공 -> Sync")
     void singleSync() throws Exception {
-        assertEquals(couponRepository.getPriceSync("mix"), 1000L);
+        assertEquals(couponPriceService.getPriceSync("mix"), 1000L);
     }
 
     @Test
     @DisplayName("금액비교 multi -> 성공 -> Sync")
     void multiSync() throws Exception {
         assertAll("couponName",
-                () -> assertEquals(couponRepository.getPriceSync("mix"), 1000L),
-                () -> assertEquals(couponRepository.getPriceSync("string"), 2000L),
-                () -> assertEquals(couponRepository.getPriceSync("random"), 3000L)
+                () -> assertEquals(couponPriceService.getPriceSync("mix"), 1000L),
+                () -> assertEquals(couponPriceService.getPriceSync("string"), 2000L),
+                () -> assertEquals(couponPriceService.getPriceSync("random"), 3000L)
         );
     }
 
@@ -42,7 +43,7 @@ class CouponRepositoryTest {
     @ValueSource(strings = {"mix", "random", "string"})
     @DisplayName("여러 파라메터 테스트")
     void parameterizedSync(String couponName) throws Exception {
-        long priceSync = couponRepository.getPriceSync(couponName);
+        long priceSync = couponPriceService.getPriceSync(couponName);
         Assertions.assertTrue(priceSync > 0);
     }
 

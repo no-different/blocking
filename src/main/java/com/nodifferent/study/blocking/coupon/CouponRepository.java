@@ -20,7 +20,7 @@ public class CouponRepository {
         couponMaps.put("random", Coupon.builder().couponName("random").price(3000L).build());
     }
 
-    public long getPriceSync(String name) {
+    public long getPriceByName(String name) {
 
         try {
             Thread.sleep(1000);
@@ -30,4 +30,5 @@ public class CouponRepository {
 
         return couponMaps.get(name).getPrice();
     }
+
 }
